@@ -5,18 +5,18 @@ Loads a locale from a JSON file
 ```
 const resource = require('nodejs-locale');
 
-var r = new resource({
+var translate = new resource({
     locale: 'en',
     module: 'users', 
     dir: './locales'
 });
 
 // Outputs a simple string
-console.log(r.message('simple'));
+console.log(translate.message('simple'));
 
 
 // Outputs a formatted string
-console.log(r.format('advanced', ['soubhik', 'angular']));
+console.log(translate.format('advanced', ['soubhik', 'angular']));
 
 
 ```
