@@ -14,6 +14,8 @@ var translate = new resource({
 // Outputs a simple string
 console.log(translate.message('simple'));
 
+// Can also be used for nested JSON
+console.log(translate.message('simple').a.b);
 
 // Outputs a formatted string
 console.log(translate.format('advanced', ['soubhik', 'angular']));

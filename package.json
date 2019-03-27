@@ -1,6 +1,6 @@
 {
   "name": "nodejs-locale",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Loads a locale from a JSON file",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/soubhikchatterjee/nodejs-locale.git"
   },
-  "keywords": [],
+  "keywords": [
+    "locale",
+    "localization",
+    "i18n"
+  ],
   "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "license": "ISC",
   "bugs": {
