@@ -11,7 +11,7 @@
     "url": "git+https://github.com/soubhikchatterjee/nodejs-locale.git"
   },
   "keywords": [],
-  "author": "Soubhik Chatterjee",
+  "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/soubhikchatterjee/nodejs-locale/issues"
