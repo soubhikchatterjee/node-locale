@@ -9,7 +9,27 @@ class Locale {
         this.dir = dir;
     }
 
-    message(key) {
+    _(key, args = []) {
+        const message = this._message(key);
+
+        const final = message.split(' ').map(item => {
+          if (item.match(/{{.}}/)) {
+              const getIndex = item.match(/\d/);
+
+              if(!getIndex) {
+                 return '';
+              }
+
+              return item.replace(/{{.}}/g, args[getIndex]);
+          }
+
+          return item;
+        });
+
+        return final.join(' ');
+    }
+
+    _message(key) {
 
         if (!key) {
             throw new Error(`Key not specified`);
@@ -17,22 +37,6 @@ class Locale {
 
         const resource = this._resource ? this._resource : this._loadResource();
         return resource[key] ? resource[key] : '';
-    }
-
-    format(key, args) {
-        const message = this.message(key);
-
-        const final = message.split(' ').map(item => {
-            if (item.match(/{{.}}/)) {
-                const index = item.replace(/[{|}|\.]/g, '');
-                const replaceWith = args[index] ? args[index] : '';
-                return item.replace(item, replaceWith)
-            }
-
-            return item;
-        });
-
-        return final.join(' ');
     }
 
     _loadResource() {

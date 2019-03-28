@@ -3,25 +3,27 @@ Loads a locale from a JSON file
 
 ## Usage
 ```
-const resource = require('nodejs-locale');
+const T = require('nodejs-locale');
 
-var translate = new resource({
+var t = new T({
     locale: 'en',
-    module: 'users', 
+    module: 'users',
     dir: './locales'
 });
 
 // Outputs a simple string
-console.log(translate.message('simple'));
+console.log(t._('simple'));
 
 // Can also be used for nested JSON
-console.log(translate.message('simple').a.b);
+console.log(t._('simple').a.b);
 
 // Outputs a formatted string
-console.log(translate.format('advanced', ['soubhik', 'angular']));
+console.log(t._('advanced', ['soubhik', 'angular']));
 
 
 ```
+
+## Check the [Example](https://github.com/soubhikchatterjee/nodejs-locale/tree/master/example)
 
 ## Options
 
@@ -30,4 +32,3 @@ console.log(translate.format('advanced', ['soubhik', 'angular']));
 | locale      | The local folder name                                    | String    | No       |
 | module      | The module to load                                       | String    | No       |
 | dir         | Custom directory from where the locale should be loaded. defaults to `./resources/locale` | String    | Yes      |
-

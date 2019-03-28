@@ -1,6 +1,6 @@
 {
     "simple": "Thanks for using this package",
-    "advanced": "Thanks {{0}} for using {{1}}.",
+    "advanced": "Thanks {{0}}, for using {{1}}!!!!!!",
     "nested": {
         "a": {
             "b": "Yay!"

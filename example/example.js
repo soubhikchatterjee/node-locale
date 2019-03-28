@@ -1,16 +1,16 @@
-const resource = require('nodejs-locale');
+const T = require('nodejs-locale');
 const path = require('path');
 
-var translate = new resource({
+var t = new T({
     locale: 'en',
     module: 'clients',
     dir: path.join(__dirname, 'resources', 'locale')
 });
 
-console.log(translate.message('simple')); // Thanks for using this package
+console.log(t._('simple')); // Thanks for using this package
 
 // Can also load nested JSON objects
-console.log(translate.message('nested').a.b); // Yay!
+console.log(t._('nested').a.b); // Yay!
 
 // Supports arguments
-console.log(translate.format('advanced', ['user', 'nodejs-locale'])); // Thanks user for using nodejs-locale
+console.log(t._('advanced', ['John', 'nodejs-locale'])); // Thanks John, for using nodejs-locale!!!!!!
