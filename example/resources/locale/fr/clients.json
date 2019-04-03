@@ -1,0 +1,9 @@
+{
+    "simple": "Merci d'avoir utilisé ce paquet",
+    "advanced": "Merci {{0}}, d'avoir utilisé ce {{1}}!!!!",
+    "nested": {
+        "a": {
+            "b": "Yay!"
+        }
+    }
+}
