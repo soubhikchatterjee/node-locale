@@ -13,6 +13,8 @@ var t = new T({
 
 // Outputs a simple string
 console.log(t._('simple'));
+console.log(t._('greetings'));
+
 
 // Can also be used for nested JSON
 console.log(t._('simple').a.b);
@@ -20,10 +22,17 @@ console.log(t._('simple').a.b);
 // Outputs a formatted string
 console.log(t._('advanced', ['soubhik', 'angular']));
 
+// Change the locale at run-time
+t.locale = 'fr'
+
+// Change the module name at run-time
+t.module = 'users';
+
+console.log(t._('greetings'));
 
 ```
 
-## Check the [Example](https://github.com/soubhikchatterjee/nodejs-locale/tree/master/example)
+## Checkout the [Example](https://github.com/soubhikchatterjee/nodejs-locale/tree/master/example)
 
 ## Options
 
