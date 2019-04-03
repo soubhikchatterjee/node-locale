@@ -1,6 +1,6 @@
 {
   "name": "nodejs-locale",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Loads a locale from a JSON file",
   "main": "index.js",
   "scripts": {
