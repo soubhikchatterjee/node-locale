@@ -1,15 +1,20 @@
-# nodejs-locale
-Loads a locale from a JSON file
+# Localization for NodeJS
+
+A simple yet powerful module that loads a locale from a JSON file. This is a perfect if you looking to make your nodejs project multilingual.
 
 ## Usage
+
 ```
 const T = require('nodejs-locale');
 
 var t = new T({
-    locale: 'en',
-    module: 'users',
-    dir: './locales'
+    locale: 'en', // The locale directory to look into
+    module: ['users'], // The locale file(s) to load
+    dir: './locales', // The path where all the locale folders for eg. 'en' are placed.
+    silentFail: true // Do not throw an exception if a module is not found
 });
+
+// With the above settings, this module will look for a locale file at: ./locales/en/users.json
 
 // Outputs a simple string
 console.log(t._('simple'));
@@ -25,19 +30,26 @@ console.log(t._('advanced', ['soubhik', 'angular']));
 // Change the locale at run-time
 t.locale = 'fr'
 
-// Change the module name at run-time
-t.module = 'users';
+// Add a module name at run-time
+t.addModule('users');
 
+// Remove a module
+t.removeModule('users');
+
+// Get all modules
+console.log(t.modules);
+
+// Get locale string
 console.log(t._('greetings'));
-
 ```
 
 ## Checkout the [Example](https://github.com/soubhikchatterjee/nodejs-locale/tree/master/example)
 
 ## Options
 
-| Option Name | Description                                              | Data Type | Optional |
-|-------------|----------------------------------------------------------|-----------|----------|
-| locale      | The local folder name                                    | String    | No       |
-| module      | The module to load                                       | String    | No       |
-| dir         | Custom directory from where the locale should be loaded. defaults to `./resources/locale` | String    | Yes      |
+| Option Name | Description                                               | Data Type | Optional | Default Value      |
+|-------------|-----------------------------------------------------------|-----------|----------|--------------------|
+| locale      | The local folder name                                     | String    | No       | -                  |
+| module      | The module to load                                        | String    | No       | -                  |
+| dir         | Custom directory from where the locale should be loaded.  | String    | Yes      | ./resources/locale |
+| silentFail  | Does not throw an exception if a module path is not found | Boolean   | Yes      | false              |

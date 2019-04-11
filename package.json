@@ -1,7 +1,7 @@
 {
   "name": "nodejs-locale",
-  "version": "1.0.5",
-  "description": "Loads a locale from a JSON file",
+  "version": "1.1.0",
+  "description": "Perfect module to make your nodejs project multilingual",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

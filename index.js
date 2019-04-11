@@ -1,83 +1,104 @@
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 
 class Locale {
+  constructor({ locale, modules = [], dir, silentFail = false }) {
+    this._locale = locale;
+    this._modules = modules;
+    this._dir = dir;
+    this._silentFail = silentFail;
+  }
 
-    constructor({ locale, module, dir }) {
-        this._locale = locale;
-        this._module = module;
-        this._dir = dir;
-    }
+  _(key, args = []) {
+    const message = this._message(key);
+    const final = message.split(" ").map(item => {
+      if (item.match(/{{.}}/)) {
+        const getIndex = item.match(/\d/);
 
-    _(key, args = []) {
-        const message = this._message(key);
-        const final = message.split(' ').map(item => {
-            if (item.match(/{{.}}/)) {
-                const getIndex = item.match(/\d/);
-
-                if (!getIndex) {
-                    return '';
-                }
-
-                return item.replace(/{{.}}/g, args[getIndex]);
-            }
-
-            return item;
-        });
-
-        return final.join(' ');
-    }
-
-    get module() {
-        return this._module;
-    }
-
-    set module(newModule) {
-        this._module = newModule;
-        this._loadResource(); // Invalidate cache
-    }
-
-    get locale() {
-        return this._locale;
-    }
-
-    set locale(newLocale) {
-        this._locale = newLocale;
-        this._loadResource(); // Invalidate cache
-    }
-
-    _message(key) {
-
-        if (!key) {
-            throw new Error(`Key not specified`);
+        if (!getIndex) {
+          return "";
         }
 
-        const resource = this._resource ? this._resource : this._loadResource();
-        return resource[key] ? resource[key] : '';
+        return item.replace(/{{.}}/g, args[getIndex]);
+      }
+
+      return item;
+    });
+
+    return final.join(" ");
+  }
+
+  get modules() {
+    return this._modules;
+  }
+
+  addModule(newModule) {
+    // If module already exists, bailout!
+    if (this._modules.indexOf(newModule) !== -1) {
+      return;
     }
 
-    _loadResource() {
-        if (!this._dir) {
-            this._dir = path.join(__dirname, 'resources', 'locale');
-        }
+    this._modules.push(newModule);
+    this._loadResource(); // Invalidate cache
+  }
 
-        const dir = path.join(this._dir, this._locale);
-        const langFile = path.join(dir, `${this._module}.json`);
+  removeModule(moduleName) {
+    const index = this._modules.indexOf(moduleName);
+    this._modules.splice(index, 1);
+    this._loadResource(); // Invalidate cache
+  }
 
-        if (!fs.existsSync(langFile)) {
-            throw new Error(`Language file ${langFile} does not exists`);
-        }
+  get locale() {
+    return this._locale;
+  }
 
-        // Read the contents of the file
-        const readFile = fs.readFileSync(langFile);
+  set locale(newLocale) {
+    this._locale = newLocale;
+    this._loadResource(); // Invalidate cache
+  }
 
-        try {
-            return this._resource = JSON.parse(readFile);
-        } catch (error) {
-            throw new Error(`Invalid JSON file ${langFile}`);
-        }
+  _message(key) {
+    if (!key) {
+      throw new Error(`Key not specified`);
     }
 
+    const resource = this._resource ? this._resource : this._loadResource();
+    return resource[key] ? resource[key] : "";
+  }
+
+  _loadResource() {
+    if (!this._dir) {
+      this._dir = path.join(__dirname, "resources", "locale");
+    }
+
+    let finalObject = {};
+    for (const moduleItem of this._modules) {
+      const dir = path.join(this._dir, this._locale);
+      const langFile = path.join(dir, `${moduleItem}.json`);
+
+      if (!fs.existsSync(langFile)) {
+        if (this._silentFail === false) {
+          console.log("siltr", this._silentFail);
+          throw new Error(`Language file ${langFile} does not exists`);
+        }
+        continue;
+      }
+
+      // Read the contents of the file
+      const readFile = fs.readFileSync(langFile);
+      const parsedObject = JSON.parse(readFile);
+      finalObject = {
+        ...finalObject,
+        ...parsedObject
+      };
+    }
+
+    try {
+      return (this._resource = finalObject);
+    } catch (error) {
+      throw new Error(`Invalid JSON file ${langFile}`);
+    }
+  }
 }
 
 module.exports = Locale;
