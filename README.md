@@ -46,9 +46,8 @@ console.log(t._('greetings'));
 
 ## Options
 
-| Option Name | Description                                               | Data Type | Optional | Default Value      |
-| ----------- | --------------------------------------------------------- | --------- | -------- | ------------------ |
-| locale      | The local folder name                                     | String    | No       | -                  |
-| module      | The module to load                                        | String    | No       | -                  |
-| dir         | Custom directory from where the locale should be loaded.  | String    | Yes      | ./resources/locale |
-| silentFail  | Does not throw an exception if a module path is not found | Boolean   | Yes      | false              |
+| Option Name | Description                                              | Data Type | Optional | Default Value      |
+| ----------- | -------------------------------------------------------- | --------- | -------- | ------------------ |
+| locale      | The local folder name                                    | String    | No       | -                  |
+| module      | The module to load                                       | String    | No       | -                  |
+| dir         | Custom directory from where the locale should be loaded. | String    | Yes      | ./resources/locale |
