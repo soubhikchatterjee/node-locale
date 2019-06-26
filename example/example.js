@@ -1,21 +1,23 @@
-const T = require("nodejs-locale");
+const T = require("node-locale");
 const path = require("path");
 
 var t = new T({
   locale: "en", // The locale directory to look into
   module: ["clients", "common"], // The locale file(s) to load
-  dir: path.join(__dirname, "resources", "locale"), // The path where all the locale folders for eg. 'en' are placed.
-  silentFail: true // Do not throw an exception if a module is not found
+  directories: [
+    path.join(__dirname, "example", "resources", "locale"),
+    path.join(__dirname, "example", "resources", "locale2")
+  ] // The path where all the locale folders for eg. 'en' are placed.
 });
 
 console.log(t._("simple")); // Thanks for using this package
-console.log(t._("greetings")); // Have a good day!
+console.log(t._("greetings")); // Greetings from locale2
 
 // Can also load nested JSON objects
 console.log(t._("nested").a.b); // Yay!
 
 // Supports arguments
-console.log(t._("advanced", ["John", "nodejs-locale"])); // Thanks John, for using nodejs-locale!!!!!!
+console.log(t._("advanced", ["John", "node-locale"])); // Thanks John, for using node-locale!!!!!!
 
 // Change the locale at run-time
 t.locale = "fr";

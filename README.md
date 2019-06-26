@@ -5,13 +5,12 @@ A simple yet powerful module that loads a locale from a JSON file. This is a per
 ## Usage
 
 ```
-const T = require('nodejs-locale');
+const T = require('node-locale');
 
 var t = new T({
     locale: 'en', // The locale directory to look into
     module: ['users'], // The locale file(s) to load
-    dir: './locales', // The path where all the locale folders for eg. 'en' are placed.
-    silentFail: true // Do not throw an exception if a module is not found
+    directories: ['./locales'], // An array containing path(s) to the "locale" folders.
 });
 
 // With the above settings, this module will look for a locale file at: ./locales/en/users.json
@@ -43,12 +42,12 @@ console.log(t.modules);
 console.log(t._('greetings'));
 ```
 
-## Checkout the [Example](https://github.com/soubhikchatterjee/nodejs-locale/tree/master/example)
+## Checkout the [Example](https://github.com/soubhikchatterjee/node-locale/tree/master/example)
 
 ## Options
 
 | Option Name | Description                                               | Data Type | Optional | Default Value      |
-|-------------|-----------------------------------------------------------|-----------|----------|--------------------|
+| ----------- | --------------------------------------------------------- | --------- | -------- | ------------------ |
 | locale      | The local folder name                                     | String    | No       | -                  |
 | module      | The module to load                                        | String    | No       | -                  |
 | dir         | Custom directory from where the locale should be loaded.  | String    | Yes      | ./resources/locale |

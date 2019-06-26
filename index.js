@@ -2,11 +2,10 @@ const path = require("path");
 const fs = require("fs");
 
 class Locale {
-  constructor({ locale, modules = [], dir, silentFail = false }) {
+  constructor({ locale, modules = [], directories = [] }) {
     this._locale = locale;
     this._modules = modules;
-    this._dir = dir;
-    this._silentFail = silentFail;
+    this._directories = directories;
   }
 
   _(key, args = []) {
@@ -39,13 +38,13 @@ class Locale {
     }
 
     this._modules.push(newModule);
-    this._loadResource(); // Invalidate cache
+    this._loadResources(); // Invalidate cache
   }
 
   removeModule(moduleName) {
     const index = this._modules.indexOf(moduleName);
     this._modules.splice(index, 1);
-    this._loadResource(); // Invalidate cache
+    this._loadResources(); // Invalidate cache
   }
 
   get locale() {
@@ -54,7 +53,7 @@ class Locale {
 
   set locale(newLocale) {
     this._locale = newLocale;
-    this._loadResource(); // Invalidate cache
+    this._loadResources(); // Invalidate cache
   }
 
   _message(key) {
@@ -62,42 +61,61 @@ class Locale {
       throw new Error(`Key not specified`);
     }
 
-    const resource = this._resource ? this._resource : this._loadResource();
-    return resource[key] ? resource[key] : "";
+    const resource = this._resource ? this._resource : this._loadResources();
+
+    return resource && typeof resource[key] !== "undefined"
+      ? resource[key]
+      : "";
   }
 
-  _loadResource() {
-    if (!this._dir) {
-      this._dir = path.join(__dirname, "resources", "locale");
+  _loadResources() {
+    if (!this._directories || this._directories.length === 0) {
+      // If directory is not passed, add the default locale path to the directories array
+      this._directories.push(path.join(__dirname, "resources", "locale"));
     }
 
-    let finalObject = {};
-    for (const moduleItem of this._modules) {
-      const dir = path.join(this._dir, this._locale);
-      const langFile = path.join(dir, `${moduleItem}.json`);
+    // Get the fileList of all the directories specified
+    let fileListObject = {};
+    for (let directory of [...new Set(this._directories)]) {
+      // Collect file paths recursively for the directory
+      directory = path.join(directory, this._locale);
+      const fileList = this.walkSync(directory);
+      fileListObject = { ...fileListObject, ...fileList };
+    }
 
-      if (!fs.existsSync(langFile)) {
-        if (this._silentFail === false) {
-          console.log("siltr", this._silentFail);
-          throw new Error(`Language file ${langFile} does not exists`);
+    // Iterate through all the file paths and read the json and store it in a global variable
+    let finalResourceObject = {};
+    for (const fileName in fileListObject) {
+      if (fileListObject.hasOwnProperty(fileName)) {
+        try {
+          const parsedObject = JSON.parse(
+            fs.readFileSync(fileListObject[fileName])
+          );
+          finalResourceObject = { ...finalResourceObject, ...parsedObject };
+        } catch (error) {
+          throw new Error(`Invalid JSON file ${fileListObject[fileName]}`);
         }
-        continue;
       }
-
-      // Read the contents of the file
-      const readFile = fs.readFileSync(langFile);
-      const parsedObject = JSON.parse(readFile);
-      finalObject = {
-        ...finalObject,
-        ...parsedObject
-      };
     }
 
-    try {
-      return (this._resource = finalObject);
-    } catch (error) {
-      throw new Error(`Invalid JSON file ${langFile}`);
-    }
+    return (this._resource = finalResourceObject);
+  }
+
+  walkSync(dir, fileList = {}) {
+    fs.readdirSync(dir).forEach(file => {
+      if (fs.statSync(path.join(dir, file)).isDirectory()) {
+        return this.walkSync(path.join(dir, file), fileList);
+      } else if (this._modules.includes(path.basename(file, ".json"))) {
+        // If the filename matches the one specified in the modules then include the file
+        const fileBasename = path.basename(file, ".json");
+        fileList[fileBasename] = path.join(dir, file);
+      } else {
+        // Else continue to next iteration
+        return;
+      }
+    });
+
+    return fileList;
   }
 }
 
