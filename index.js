@@ -34,11 +34,13 @@ class Locale {
   addModule(newModule) {
     // If module already exists, bailout!
     if (this._modules.indexOf(newModule) !== -1) {
-      return;
+      return this;
     }
 
     this._modules.push(newModule);
     this._loadResources(); // Invalidate cache
+    
+    return this;
   }
 
   removeModule(moduleName) {

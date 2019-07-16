@@ -32,6 +32,10 @@ t.locale = 'fr'
 // Add a module name at run-time
 t.addModule('users');
 
+// or chain the method
+t.addModule('users')
+ .addModule('roles');
+
 // Remove a module
 t.removeModule('users');
 
