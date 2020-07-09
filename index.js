@@ -39,7 +39,7 @@ class Locale {
 
     this._modules.push(newModule);
     this._loadResources(); // Invalidate cache
-    
+
     return this;
   }
 
@@ -104,6 +104,8 @@ class Locale {
   }
 
   walkSync(dir, fileList = {}) {
+    if(!fs.existsSync(dir)) return;
+    
     fs.readdirSync(dir).forEach(file => {
       if (fs.statSync(path.join(dir, file)).isDirectory()) {
         return this.walkSync(path.join(dir, file), fileList);

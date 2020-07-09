@@ -1,6 +1,6 @@
 {
   "name": "node-locale",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Perfect module to make your node project multilingual",
   "main": "index.js",
   "scripts": {
